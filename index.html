@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>TAI Test App Final</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--line:#d8dce7;--text:#111827;--muted:#6b7280;--accent:#111827;--ok:#166534;--bad:#b91c1c}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--accent);color:#fff;padding:14px 16px;position:sticky;top:0}
+.wrap{max-width:980px;margin:0 auto;padding:16px}
+.card{background:var(--card);border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.07);margin-bottom:14px}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>div{flex:1 1 180px}
+select,button,input[type=file]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:14px}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.option{text-align:left;margin-bottom:8px}
+button.option.correct{border-color:var(--ok);color:var(--ok);font-weight:bold}
+button.option.wrong{border-color:var(--bad);color:var(--bad);font-weight:bold}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;background:#eef2ff;font-size:12px;margin-right:6px;margin-bottom:6px}
+.small{font-size:13px;color:var(--muted)} .hidden{display:none}
+#qtext{font-size:20px;line-height:1.35;margin:12px 0 16px}
+#explanation{background:#f3f4f6;border-radius:12px;padding:12px;margin-top:12px}
+.statbox{display:flex;gap:12px;flex-wrap:wrap}.stat{flex:1 1 160px;background:#f9fafb;border:1px solid var(--line);border-radius:12px;padding:12px}
+.timer{font-weight:bold;color:#b91c1c}
+</style>
+</head>
+<body>
+<header><div class="wrap" style="padding:0 16px;"><strong>TAI Test App Final</strong><span id="topStats" class="small" style="float:right;color:#d1d5db;"></span></div></header>
+<div class="wrap">
+<div class="card">
+<h2>Configuración</h2>
+<div class="row">
+<div><div class="small">Modo</div><select id="mode"><option value="study">Estudio</option><option value="exam">Simulacro examen</option><option value="wrong">Repasar falladas</option></select></div>
+<div><div class="small">Bloque</div><select id="block"><option value="ALL">Todos</option><option value="I">Bloque I</option><option value="II">Bloque II</option><option value="III">Bloque III</option><option value="IV">Bloque IV</option><option value="MIX">Sin clasificar</option></select></div>
+<div><div class="small">Cantidad</div><select id="count"><option>10</option><option>20</option><option>25</option><option>50</option><option>80</option><option>100</option></select></div>
+<div><div class="small">Corrección</div><select id="marking"><option value="simple">Simple</option><option value="tai" selected>TAI (+1 / -0,33)</option></select></div>
+</div>
+<div class="row" style="margin-top:12px;">
+<div><button class="primary" id="startBtn">Empezar</button></div>
+<div><button id="resetBtn">Borrar estadísticas</button></div>
+</div>
+<div class="small" id="installHint" style="margin-top:10px;">Para instalar en Android: abre esta web en Chrome y usa “Instalar aplicación” o “Añadir a pantalla de inicio”.</div>
+<div class="small" style="margin-top:10px;">Banco inicial: <strong id="bankCount"></strong> preguntas oficiales extraíbles + generables.</div>
+</div>
+
+<div class="card">
+<h2>Generar nuevas preguntas</h2>
+<div class="row">
+<div><div class="small">Tema</div><select id="genTopic"><option>Constitución</option><option>Bases de datos</option><option>Redes</option><option>Sistemas operativos</option><option>Programación</option><option>Seguridad</option></select></div>
+<div><div class="small">Cantidad</div><select id="genCount"><option>5</option><option>10</option><option>20</option><option>50</option></select></div>
+<div><div class="small">Cargar JSON</div><input id="loadJson" type="file" accept=".json,application/json"></div>
+</div>
+<div class="row" style="margin-top:12px;">
+<div><button class="primary" id="genBtn">Generar preguntas</button></div>
+<div><button id="downloadBtn">Descargar banco actualizado</button></div>
+</div>
+<div class="small" id="genStatus" style="margin-top:10px;">Puedes generar preguntas de refuerzo y descargar el banco actualizado en JSON.</div>
+</div>
+
+<div class="card hidden" id="quizCard">
+<div class="timer" id="timer"></div>
+<div id="meta"></div>
+<div id="qtext"></div>
+<div id="options"></div>
+<div id="explanation" class="hidden"></div>
+<div class="row" style="margin-top:12px;">
+<div><button class="primary" id="nextBtn" disabled>Siguiente</button></div>
+<div><button id="finishBtn">Finalizar</button></div>
+</div>
+</div>
+
+<div class="card hidden" id="resultsCard">
+<h2>Resultado</h2>
+<div class="statbox">
+<div class="stat"><div class="small">Aciertos</div><div id="scoreHits" style="font-size:22px;font-weight:bold;"></div></div>
+<div class="stat"><div class="small">Fallos</div><div id="scoreMiss" style="font-size:22px;font-weight:bold;"></div></div>
+<div class="stat"><div class="small">En blanco</div><div id="scoreBlank" style="font-size:22px;font-weight:bold;"></div></div>
+<div class="stat"><div class="small">Puntuación</div><div id="scoreFinal" style="font-size:22px;font-weight:bold;"></div></div>
+</div>
+<div id="resultsText" class="small" style="margin-top:14px;"></div>
+<div class="row" style="margin-top:12px;"><div><button class="primary" id="againBtn">Hacer otro</button></div></div>
+</div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

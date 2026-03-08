@@ -1,0 +1,16 @@
+{
+  "name": "TAI Test App Final",
+  "short_name": "TAI Tests",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "icon_tai_test.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
