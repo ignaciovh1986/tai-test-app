@@ -5,12 +5,14 @@
   "display": "standalone",
   "background_color": "#f5f7fb",
   "theme_color": "#111827",
+  {
   "icons": [
     {
-      "src": "icon_tai_app_512.png",
+      "src": "icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ]
 }
+  
