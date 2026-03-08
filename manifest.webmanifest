@@ -7,10 +7,10 @@
   "theme_color": "#111827",
   "icons": [
     {
-      "src": "icon_tai_test.png",
-      "type": "image/png",
+      "src": "icon_tai_app_512.png",
       "sizes": "512x512",
-      "purpose": "maskable"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
