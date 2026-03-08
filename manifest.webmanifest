@@ -8,7 +8,6 @@
   "icons": [
     {
       "src": "icon_tai_test.png",
-      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     }
