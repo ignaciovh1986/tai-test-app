@@ -9,6 +9,7 @@
     {
       "src": "icon_tai_test.png",
       "type": "image/png",
+      "sizes": "512x512",
       "purpose": "any"
     }
   ]
